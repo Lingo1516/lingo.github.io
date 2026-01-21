@@ -22,92 +22,92 @@
     header p{ margin:0; color:var(--muted); font-size:15px; }
     .container{ max-width:1100px; margin:0 auto; padding:20px; }
     
-    /* 大按鈕樣式 */
     .main-action{ display:flex; flex-direction:column; align-items:center; gap:14px; margin:24px 0 40px; }
     .cloud-btn{
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       color:#020617; border:none; border-radius:16px;
       padding:18px 28px; font-size:18px; font-weight:700;
-      cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,.3);
+      cursor:pointer; box-shadow:0 10px 30px rgba(125,211,252,0.3);
+      transition: 0.3s;
     }
+    .cloud-btn:hover{ transform: scale(1.05); }
     .cloud-btn small{ display:block; font-size:12px; opacity:.7; }
 
     .section{ margin-bottom:36px; }
     .section h2{ margin:0 0 16px; font-size:20px; display:flex; align-items:center; gap:10px; color:var(--accent); }
-    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; }
     
     .card{
-      background:rgba(255,255,255,.05); border-radius:18px; padding:18px;
-      min-height:140px; display:flex; flex-direction:column; justify-content:space-between;
+      background:rgba(255,255,255,.05); border-radius:18px; padding:20px;
+      min-height:150px; display:flex; flex-direction:column; justify-content:space-between;
       border:1px solid rgba(255,255,255,.1);
     }
-    .card strong{ font-size:17px; margin-bottom: 8px; display: block; }
-    .card p{ font-size:14px; color:#c7d2fe; line-height:1.5; margin: 0; }
+    .card strong{ font-size:18px; color:#fff; }
+    .card p{ font-size:14px; color:#c7d2fe; line-height:1.5; margin: 8px 0; }
     
-    /* 卡片按鈕 */
     .card button{
       align-self:flex-start; margin-top:12px; background:rgba(125,211,252,0.1);
       border:1px solid var(--accent); color:var(--accent);
-      padding:6px 12px; border-radius:8px; cursor:pointer; font-size:14px;
+      padding:8px 16px; border-radius:10px; cursor:pointer; font-size:14px; font-weight:bold;
     }
     .card button:hover{ background:var(--accent); color:#000; }
-    footer{ text-align:center; padding:30px; font-size:13px; color:#94a3b8; }
+    footer{ text-align:center; padding:40px; font-size:13px; color:#94a3b8; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>🏠 家庭智慧入口</h1>
-  <p>一個入口，搞定雲端・生活・旅遊</p>
+  <p>專為全家人設計的數位工具箱</p>
 </header>
 
 <div class="container">
 
   <div class="main-action">
     <button class="cloud-btn" onclick="openCloud()">
-      ☁️ 打開家庭雲端
-      <small>點此查看 Google Drive 重要文件</small>
+      ☁️ 打開家庭雲端硬碟
+      <small>存取重要文件、合約、保險資料</small>
     </button>
   </div>
 
   <div class="section">
-    <h2>📁 生活工具</h2>
+    <h2>📁 家庭生活工具</h2>
     <div class="grid">
       <div class="card">
-        <strong>Google 相簿</strong>
-        <p>全家人的照片紀錄都在這裡。</p>
-        <button onclick="openExternal('https://photos.google.com')">開啟相簿</button>
+        <strong>📸 家族相簿</strong>
+        <p>查看 Google Photos 裡的全家出遊紀錄與備份照片。</p>
+        <button onclick="openLink('https://photos.google.com')">立即前往</button>
       </div>
       <div class="card">
-        <strong>家庭 Gmail</strong>
-        <p>收發重要通知與電子帳單。</p>
-        <button onclick="openExternal('https://mail.google.com')">開啟郵件</button>
+        <strong>📅 家族行事曆</strong>
+        <p>確認家人的聚餐、出遊與重要紀念日提醒。</p>
+        <button onclick="openLink('https://calendar.google.com')">開啟日曆</button>
       </div>
       <div class="card">
-        <strong>地圖導航</strong>
-        <p>查詢路線、找餐廳、存地點。</p>
-        <button onclick="openExternal('https://www.google.com.tw/maps')">開啟地圖</button>
+        <strong>📍 Google 地圖</strong>
+        <p>找餐廳、儲存景點或規劃下一趟家庭旅行的路線。</p>
+        <button onclick="openLink('https://www.google.com.tw/maps')">打開地圖</button>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <h2>✈️ 旅遊預訂</h2>
+    <h2>✈️ 旅遊行程規劃</h2>
     <div class="grid">
       <div class="card">
-        <strong>Booking.com</strong>
-        <p>快速查詢與預訂住宿。</p>
-        <button onclick="openExternal('https://www.booking.com')">前往訂房</button>
+        <strong>🏨 住宿預訂 (Booking)</strong>
+        <p>查詢全世界的飯店、民宿，管理現有訂單。</p>
+        <button onclick="openLink('https://www.booking.com')">前往訂房</button>
       </div>
       <div class="card">
-        <strong>Agoda</strong>
-        <p>熱門旅遊住宿折扣優惠。</p>
-        <button onclick="openExternal('https://www.agoda.com')">前往 Agoda</button>
+        <strong>🚄 高鐵訂票</strong>
+        <p>快速查詢台灣高鐵時刻表與進行線上購票。</p>
+        <button onclick="openLink('https://www.thsrc.com.tw')">前往高鐵</button>
       </div>
       <div class="card">
-        <strong>高鐵訂票</strong>
-        <p>查詢時刻表與線上訂票。</p>
-        <button onclick="openExternal('https://www.thsrc.com.tw')">前往高鐵</button>
+        <strong>📧 Gmail 郵件</strong>
+        <p>檢查訂單確認信、電子門票與水電帳單通知。</p>
+        <button onclick="openLink('https://mail.google.com')">開啟 Gmail</button>
       </div>
     </div>
   </div>
@@ -115,18 +115,18 @@
 </div>
 
 <footer>
-  家庭入口頁｜只要記住這一頁即可
+  只要記住這一個網址，全家生活都搞定
 </footer>
 
 <script>
-// 幫你處理好了：這是你剛才產生的唯一真連結
+// 這就是你剛才拿到的雲端唯一連結
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec";
 
 function openCloud(){
   window.open(CLOUD_URL, "_blank");
 }
 
-function openExternal(url){
+function openLink(url){
   window.open(url, "_blank");
 }
 </script>
