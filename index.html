@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>資源分享與中控站 | Resource Hub</title>
+    <title>Lingo's 雙向共享空間</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -130,37 +130,32 @@
         .grid-panel {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-rows: auto 1fr;
             gap: 24px;
         }
 
-        /* === 資源下載列表樣式 === */
-        .resource-list {
-            list-style: none; padding: 0; margin: 0;
-            overflow-y: auto;
+        /* === 雙向共享區按鈕 === */
+        .share-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            height: 100%;
         }
-        .resource-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px; margin-bottom: 8px;
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px; text-decoration: none; color: var(--text-primary);
-            transition: 0.2s;
-        }
-        .resource-item:hover { background: rgba(255,255,255,0.08); border-color: #38bdf8; transform: translateX(5px); }
-        .res-info { display: flex; flex-direction: column; gap: 4px; }
-        .res-name { font-weight: 500; font-size: 15px; }
-        .res-desc { font-size: 12px; color: var(--text-secondary); }
-        .res-icon { font-size: 20px; }
-
-        /* === 上傳按鈕區樣式 === */
-        .upload-zone {
+        .action-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100%; border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px;
-            padding: 20px; text-align: center; gap: 15px; transition: 0.2s;
-            cursor: pointer; text-decoration: none; color: var(--text-primary);
+            padding: 30px 20px; border-radius: 16px; text-decoration: none;
+            transition: 0.3s; text-align: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1);
         }
-        .upload-zone:hover { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
-        .upload-icon { font-size: 40px; color: #38bdf8; }
+        /* 瀏覽按鈕 */
+        .btn-view { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
+        .btn-view:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-3px); }
+        /* 上傳按鈕 */
+        .btn-upload { background: rgba(167, 139, 250, 0.1); color: #a78bfa; }
+        .btn-upload:hover { background: rgba(167, 139, 250, 0.2); transform: translateY(-3px); }
+
+        .btn-icon { font-size: 32px; margin-bottom: 5px; }
+        .btn-title { font-weight: bold; font-size: 18px; }
+        .btn-desc { font-size: 12px; opacity: 0.8; line-height: 1.4; }
 
         .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .link-btn {
@@ -204,40 +199,23 @@
 
         <div class="grid-panel">
             
-            <div class="card">
-                <h3>📂 資源分享 (Download)</h3>
-                <div class="resource-list">
-                    <a href="#" class="resource-item">
-                        <div class="res-info">
-                            <span class="res-name">📄 2026 年度計畫書 (範例)</span>
-                            <span class="res-desc">尚未設定連結</span>
-                        </div>
-                        <span class="res-icon">⬇️</span>
-                    </a>
+            <div class="card" style="grid-column: span 2;">
+                <h3>📂 雙向共享中心 (Public Share)</h3>
+                <div class="share-actions">
                     
-                    <a href="#" class="resource-item">
-                        <div class="res-info">
-                            <span class="res-name">🖼️ 活動照片集錦</span>
-                            <span class="res-desc">Google 相簿</span>
-                        </div>
-                        <span class="res-icon">↗️</span>
+                    <a href="https://drive.google.com/drive/folders/1k_373-1HTu1bBFHNuEJiWE1-75PqUz1gc7XVR8-9n0jdiON6gAlGKMJHnDEhU6BmS2h_hlSl?usp=sharing" target="_blank" class="action-btn btn-view">
+                        <div class="btn-icon">📂</div>
+                        <div class="btn-title">瀏覽共享區</div>
+                        <div class="btn-desc">查看所有檔案<br>確認上傳是否成功</div>
                     </a>
-                </div>
-                <div style="margin-top:10px; font-size:12px; color:#64748b; text-align:center;">
-                    (如需修改下載連結，請編輯程式碼第 155 行)
-                </div>
-            </div>
 
-            <div class="card">
-                <h3>📤 投遞箱 (Upload Zone)</h3>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfq4vQDMfnBrIBf6ljOqKuzWIE8u7NoNJvVZjkAw27WK5rsPA/viewform?usp=publish-editor" target="_blank" class="upload-zone">
-                    <div class="upload-icon">☁️</div>
-                    <div style="font-weight:bold; font-size:18px;">上傳檔案給我</div>
-                    <div style="font-size:13px; color:#94a3b8;">
-                        點擊此處開啟上傳視窗<br>
-                        檔案將直接存入我的雲端硬碟
-                    </div>
-                </a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfq4vQDMfnBrIBf6ljOqKuzWIE8u7NoNJvVZjkAw27WK5rsPA/viewform?usp=publish-editor" target="_blank" class="action-btn btn-upload">
+                        <div class="btn-icon">📤</div>
+                        <div class="btn-title">上傳檔案</div>
+                        <div class="btn-desc">點擊開啟上傳視窗<br>檔案將自動存入共享區</div>
+                    </a>
+
+                </div>
             </div>
 
             <div class="card">
@@ -278,9 +256,7 @@
         const FAMILY_PASSWORD = "4343818"; 
 
         const SECRET_LINKS = {
-            // 這邊放你私人的雲端連結
             cloud: "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec",
-            // 這邊放你私人的相簿連結
             photo: "https://photos.google.com"
         };
 
