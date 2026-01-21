@@ -70,13 +70,6 @@
             gap: 24px;
         }
 
-        .hero-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
         .welcome-text h1 {
             font-size: 36px;
             margin: 0;
@@ -306,36 +299,35 @@
 
     <script>
         // ==========================================
-        // 🔒 安全設定區 (請在這裡修改)
+        // 🔒 安全設定區 (已幫您修改)
         // ==========================================
         
-        // 1. 設定你的家庭密碼 (預設是 8888)
-        const FAMILY_PASSWORD = "8888"; 
+        // 1. 已更新：家庭電話作為密碼
+        const FAMILY_PASSWORD = "4343818"; 
 
-        // 2. 設定你的私密連結 (藏在這裡，不要寫在上面 HTML 裡)
-        // 注意：把下面的網址換成你真正的「雲端連結」和「相簿連結」
+        // 2. 您的私密連結 (雲端連結已保留您原本的)
+        // 如果您有新的相簿連結，請修改下面的 "photo" 那一行
         const SECRET_LINKS = {
             cloud: "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec",
-            photo: "https://photos.google.com/"
+            photo: "https://photos.google.com"
         };
 
         // ==========================================
-        // 🛑 核心程式碼 (以下不用動)
+        // 🛑 核心程式碼
         // ==========================================
 
-        // 密碼檢查功能
+        // 密碼檢查功能 (包含提示)
         function checkPassAndOpen(type) {
-            let inputPass = prompt("🔒 這是私密區域，請輸入家庭密碼：");
+            // 這裡加入了提示文字
+            let inputPass = prompt("🔒 這是私密區域，請輸入家庭密碼 (提示：家裡電話)：");
             
             if (inputPass === FAMILY_PASSWORD) {
-                // 密碼對了，開啟對應的連結
                 if(SECRET_LINKS[type]) {
                     window.open(SECRET_LINKS[type], "_blank");
                 } else {
                     alert("連結設定有誤！");
                 }
             } else if (inputPass !== null) {
-                // 密碼錯了
                 alert("🚫 密碼錯誤！禁止存取");
             }
         }
