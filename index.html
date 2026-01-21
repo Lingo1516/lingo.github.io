@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>家庭中控核心 | Family Command</title>
+    <title>資源分享與中控站 | Resource Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -134,48 +134,33 @@
             gap: 24px;
         }
 
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 14px;
+        /* === 資源下載列表樣式 === */
+        .resource-list {
+            list-style: none; padding: 0; margin: 0;
+            overflow-y: auto;
         }
-        .info-row:last-child { border-bottom: none; }
-        .info-val { 
-            font-family: monospace; font-size: 15px; color: #7dd3fc; 
-            cursor: pointer; padding: 4px 8px; border-radius: 4px;
-            transition: background 0.2s;
-        }
-        .info-val:hover { background: rgba(125, 211, 252, 0.1); }
-        .info-val:active { transform: scale(0.95); }
-
-        .todo-input-group { display: flex; gap: 8px; margin-bottom: 15px; }
-        .todo-input-group input {
-            flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 12px; border-radius: 8px; color: #fff;
-        }
-        .todo-add-btn {
-            background: #38bdf8; color: #000; border: none; border-radius: 8px;
-            width: 36px; cursor: pointer; font-weight: bold;
-        }
-        .todo-list {
-            list-style: none; padding: 0; margin: 0; 
-            overflow-y: auto; max-height: 200px;
-        }
-        .todo-list::-webkit-scrollbar { width: 4px; }
-        .todo-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }
-        
-        .todo-item {
+        .resource-item {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 8px; margin-bottom: 6px; background: rgba(255,255,255,0.02); border-radius: 6px;
-            animation: fadeIn 0.2s ease;
+            padding: 12px; margin-bottom: 8px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px; text-decoration: none; color: var(--text-primary);
+            transition: 0.2s;
         }
-        .todo-item.done span { text-decoration: line-through; color: var(--text-secondary); }
-        .todo-item span { cursor: pointer; flex: 1; }
-        .delete-btn { color: var(--text-secondary); background: none; border: none; cursor: pointer; font-size: 16px; }
-        .delete-btn:hover { color: var(--danger); }
+        .resource-item:hover { background: rgba(255,255,255,0.08); border-color: #38bdf8; transform: translateX(5px); }
+        .res-info { display: flex; flex-direction: column; gap: 4px; }
+        .res-name { font-weight: 500; font-size: 15px; }
+        .res-desc { font-size: 12px; color: var(--text-secondary); }
+        .res-icon { font-size: 20px; }
+
+        /* === 上傳按鈕區樣式 === */
+        .upload-zone {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100%; border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px;
+            padding: 20px; text-align: center; gap: 15px; transition: 0.2s;
+            cursor: pointer; text-decoration: none; color: var(--text-primary);
+        }
+        .upload-zone:hover { border-color: #38bdf8; background: rgba(56, 189, 248, 0.05); }
+        .upload-icon { font-size: 40px; color: #38bdf8; }
 
         .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .link-btn {
@@ -192,7 +177,6 @@
             .dashboard { grid-template-columns: 1fr; height: auto; }
             .grid-panel { grid-template-columns: 1fr; }
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -201,52 +185,59 @@
         
         <div class="card main-panel">
             <div class="welcome-text">
-                <h1>早安，Family</h1>
+                <h1>Lingo's Space</h1>
                 <p id="dateDisplay">載入中...</p>
             </div>
 
             <button class="cloud-btn" onclick="checkPassAndOpen('cloud')">
-                <strong>🔒 雲端硬碟 (已上鎖)</strong>
-                <span>點擊輸入密碼開啟重要文件</span>
-                <div class="cloud-icon">☁️</div>
+                <strong>🔒 管理者後台 (Private)</strong>
+                <span>私人雲端、合約、重要文件</span>
+                <div class="cloud-icon">⚙️</div>
             </button>
 
             <div class="memo-area">
-                <h3>📌 家人留言板 <small>(自動儲存)</small></h3>
-                <textarea id="memoInput" class="memo-input" placeholder="晚餐吃什麼？記得繳電費..."></textarea>
-                <div id="saveStatus" class="save-indicator">✓ 已自動儲存</div>
+                <h3>📌 公告 / 備忘錄</h3>
+                <textarea id="memoInput" class="memo-input" placeholder="在這裡輸入網站公告或歡迎詞..."></textarea>
+                <div id="saveStatus" class="save-indicator">✓ 已更新</div>
             </div>
         </div>
 
         <div class="grid-panel">
             
             <div class="card">
-                <h3>🔐 快速資訊 (點擊複製)</h3>
-                <div class="info-row">
-                    <span style="color:#94a3b8">WiFi 密碼</span>
-                    <span class="info-val" onclick="copyText(this)">Home_8888</span>
+                <h3>📂 資源分享 (Download)</h3>
+                <div class="resource-list">
+                    <a href="#" class="resource-item">
+                        <div class="res-info">
+                            <span class="res-name">📄 2026 年度計畫書 (範例)</span>
+                            <span class="res-desc">尚未設定連結</span>
+                        </div>
+                        <span class="res-icon">⬇️</span>
+                    </a>
+                    
+                    <a href="#" class="resource-item">
+                        <div class="res-info">
+                            <span class="res-name">🖼️ 活動照片集錦</span>
+                            <span class="res-desc">Google 相簿</span>
+                        </div>
+                        <span class="res-icon">↗️</span>
+                    </a>
                 </div>
-                <div class="info-row">
-                    <span style="color:#94a3b8">車牌號碼</span>
-                    <span class="info-val" onclick="copyText(this)">ABC-1234</span>
-                </div>
-                <div class="info-row">
-                    <span style="color:#94a3b8">手機載具</span>
-                    <span class="info-val" onclick="copyText(this)">/AB12345</span>
-                </div>
-                <div class="info-row">
-                    <span style="color:#94a3b8">身分證(父)</span>
-                    <span class="info-val" onclick="copyText(this)">A123456789</span>
+                <div style="margin-top:10px; font-size:12px; color:#64748b; text-align:center;">
+                    (如需修改下載連結，請編輯程式碼第 155 行)
                 </div>
             </div>
 
             <div class="card">
-                <h3>🛒 購物 & 待辦</h3>
-                <div class="todo-input-group">
-                    <input type="text" id="todoInput" placeholder="輸入事項..." onkeypress="if(event.key==='Enter') addTodo()">
-                    <button class="todo-add-btn" onclick="addTodo()">+</button>
-                </div>
-                <ul id="todoList" class="todo-list"></ul>
+                <h3>📤 投遞箱 (Upload Zone)</h3>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfq4vQDMfnBrIBf6ljOqKuzWIE8u7NoNJvVZjkAw27WK5rsPA/viewform?usp=publish-editor" target="_blank" class="upload-zone">
+                    <div class="upload-icon">☁️</div>
+                    <div style="font-weight:bold; font-size:18px;">上傳檔案給我</div>
+                    <div style="font-size:13px; color:#94a3b8;">
+                        點擊此處開啟上傳視窗<br>
+                        檔案將直接存入我的雲端硬碟
+                    </div>
+                </a>
             </div>
 
             <div class="card">
@@ -260,36 +251,19 @@
                         <span class="link-icon">🚄</span>
                         <span class="link-text">高鐵訂票</span>
                     </a>
-                    <a href="https://www.booking.com" target="_blank" class="link-btn">
-                        <span class="link-icon">🏨</span>
-                        <span class="link-text">Booking</span>
-                    </a>
-                    <a href="https://www.uber.com/tw/zh-tw/" target="_blank" class="link-btn">
-                        <span class="link-icon">🚗</span>
-                        <span class="link-text">叫車 Uber</span>
-                    </a>
                 </div>
             </div>
 
             <div class="card">
-                <h3>📁 生活工具箱</h3>
+                <h3>📁 私人相簿</h3>
                 <div class="link-grid">
                     <button class="link-btn" onclick="checkPassAndOpen('photo')">
                         <span class="link-icon">🔒</span>
                         <span class="link-text">私密相簿</span>
                     </button>
-                    
-                    <a href="https://calendar.google.com" target="_blank" class="link-btn">
-                        <span class="link-icon">📅</span>
-                        <span class="link-text">共用日曆</span>
-                    </a>
                     <a href="https://keep.google.com" target="_blank" class="link-btn">
                         <span class="link-icon">📝</span>
                         <span class="link-text">Google Keep</span>
-                    </a>
-                    <a href="https://mail.google.com" target="_blank" class="link-btn">
-                        <span class="link-icon">📧</span>
-                        <span class="link-text">Gmail</span>
                     </a>
                 </div>
             </div>
@@ -299,44 +273,33 @@
 
     <script>
         // ==========================================
-        // 🔒 安全設定區 (已幫您修改)
+        // ⚙️ 設定區
         // ==========================================
-        
-        // 1. 已更新：家庭電話作為密碼
         const FAMILY_PASSWORD = "4343818"; 
 
-        // 2. 您的私密連結 (雲端連結已保留您原本的)
-        // 如果您有新的相簿連結，請修改下面的 "photo" 那一行
         const SECRET_LINKS = {
+            // 這邊放你私人的雲端連結
             cloud: "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec",
+            // 這邊放你私人的相簿連結
             photo: "https://photos.google.com"
         };
 
         // ==========================================
-        // 🛑 核心程式碼
+        // 🛑 核心功能
         // ==========================================
 
-        // 密碼檢查功能 (包含提示)
         function checkPassAndOpen(type) {
-            // 這裡加入了提示文字
-            let inputPass = prompt("🔒 這是私密區域，請輸入家庭密碼 (提示：家裡電話)：");
-            
+            let inputPass = prompt("🔒 此區域為私人空間，請輸入密碼 (提示：家裡電話)：");
             if (inputPass === FAMILY_PASSWORD) {
-                if(SECRET_LINKS[type]) {
-                    window.open(SECRET_LINKS[type], "_blank");
-                } else {
-                    alert("連結設定有誤！");
-                }
+                if(SECRET_LINKS[type]) window.open(SECRET_LINKS[type], "_blank");
             } else if (inputPass !== null) {
-                alert("🚫 密碼錯誤！禁止存取");
+                alert("🚫 密碼錯誤！");
             }
         }
 
-        // 日期顯示
         const d = new Date();
         document.getElementById('dateDisplay').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 
-        // 留言板
         const memoInput = document.getElementById('memoInput');
         const saveStatus = document.getElementById('saveStatus');
         memoInput.value = localStorage.getItem('family_memo') || "";
@@ -345,47 +308,6 @@
             saveStatus.style.opacity = '1';
             setTimeout(() => { saveStatus.style.opacity = '0'; }, 1500);
         });
-
-        // 複製功能
-        function copyText(el) {
-            const originalText = el.innerText;
-            navigator.clipboard.writeText(originalText).then(() => {
-                el.innerText = "已複製!";
-                el.style.color = "#34d399";
-                setTimeout(() => {
-                    el.innerText = originalText;
-                    el.style.color = "";
-                }, 1000);
-            });
-        }
-
-        // 待辦事項
-        let todos = JSON.parse(localStorage.getItem('family_todos')) || [{ text: "記得繳水費", done: false }];
-        function renderTodos() {
-            const list = document.getElementById('todoList');
-            list.innerHTML = "";
-            todos.forEach((todo, idx) => {
-                const li = document.createElement('li');
-                li.className = `todo-item ${todo.done ? 'done' : ''}`;
-                li.innerHTML = `
-                    <span onclick="toggleTodo(${idx})">${todo.done ? '✓ ' : '○ '}${todo.text}</span>
-                    <button class="delete-btn" onclick="deleteTodo(${idx})">×</button>
-                `;
-                list.appendChild(li);
-            });
-            localStorage.setItem('family_todos', JSON.stringify(todos));
-        }
-        function addTodo() {
-            const input = document.getElementById('todoInput');
-            if (input.value.trim()) {
-                todos.unshift({ text: input.value.trim(), done: false });
-                input.value = "";
-                renderTodos();
-            }
-        }
-        function toggleTodo(idx) { todos[idx].done = !todos[idx].done; renderTodos(); }
-        function deleteTodo(idx) { todos.splice(idx, 1); renderTodos(); }
-        renderTodos();
     </script>
 </body>
 </html>
