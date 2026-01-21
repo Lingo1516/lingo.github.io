@@ -52,7 +52,7 @@
         
         h1 { margin-top: 0; border-left: 4px solid var(--accent); padding-left: 12px; margin-bottom: 20px; font-size: 22px; }
 
-        /* === ✨ 新增：分類目錄按鈕區 === */
+        /* 分類目錄按鈕區 */
         #category-filters {
             display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap;
         }
@@ -122,10 +122,7 @@
     <main class="main-content">
         <div id="home" class="page active">
             <h1>最新公告與資源</h1>
-            
-            <div id="category-filters">
-                </div>
-
+            <div id="category-filters"></div>
             <div id="blog-container" class="blog-grid">
                 <div class="loading">正在從 Google Excel 讀取資料中...</div>
             </div>
@@ -137,14 +134,12 @@
                 <div class="card-body">
                     這是 Lingo 的個人分享空間。<br><br>
                     此網站的內容是由 Google 試算表即時連動生成的。
-                    你可以透過左側的按鈕上傳檔案給我，所有的檔案都會彙整到共享雲端中。
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        // ✅ 你的 Excel CSV 連結
         const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTH7CNeiMc193VcP1EEMhu90fVUmEuBLBhL6m13boyfz2DcocrVknLqMXVoa8R88eRRNmJT9pPuHP3Q/pub?gid=0&single=true&output=csv";
         const FAMILY_PASSWORD = "4343818"; 
         const SECRET_LINKS = { cloud: "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec" };
@@ -159,7 +154,10 @@
         }
 
         function loadBlogPosts() {
-            Papa.parse(SHEET_CSV_URL, {
+            // ✅ 這裡加了 "Cache Buster" (時間戳記)，強迫瀏覽器抓最新資料
+            const nocacheUrl = SHEET_CSV_URL + "&t=" + new Date().getTime();
+
+            Papa.parse(nocacheUrl, {
                 download: true,
                 header: true,
                 complete: function(results) {
@@ -173,16 +171,12 @@
                     }
 
                     container.innerHTML = "";
-                    filterContainer.innerHTML = ""; // 清空舊按鈕
+                    filterContainer.innerHTML = ""; 
 
-                    // 1. 找出所有不重複的標籤 (Tags)
                     const allTags = new Set();
                     posts.forEach(p => { if(p['標籤']) allTags.add(p['標籤']); });
 
-                    // 2. 建立「全部」按鈕
                     createFilterBtn("全部", true);
-
-                    // 3. 建立其他分類按鈕
                     allTags.forEach(tag => createFilterBtn(tag, false));
 
                     function createFilterBtn(tagName, isActive) {
@@ -190,22 +184,18 @@
                         btn.className = `filter-btn ${isActive ? 'active' : ''}`;
                         btn.innerText = tagName;
                         btn.onclick = () => {
-                            // 切換按鈕樣式
                             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                             btn.classList.add('active');
-                            // 執行篩選
                             filterPosts(tagName);
                         };
                         filterContainer.appendChild(btn);
                     }
 
-                    // 4. 產生文章卡片
                     posts.forEach(post => {
                         if (!post['標題'] && !post['內容']) return;
 
                         const card = document.createElement('div');
                         card.className = 'card';
-                        // 把標籤藏在屬性裡，方便篩選
                         card.dataset.tag = post['標籤'] || "無分類";
 
                         let linkHtml = '';
@@ -229,14 +219,13 @@
             });
         }
 
-        // 篩選功能
         function filterPosts(targetTag) {
             const cards = document.querySelectorAll('.card');
             cards.forEach(card => {
                 if (targetTag === "全部" || card.dataset.tag === targetTag) {
-                    card.style.display = "flex"; // 顯示
+                    card.style.display = "flex"; 
                 } else {
-                    card.style.display = "none"; // 隱藏
+                    card.style.display = "none"; 
                 }
             });
         }
