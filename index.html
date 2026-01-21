@@ -37,10 +37,9 @@
             gap: 24px;
             max-width: 1200px;
             width: 100%;
-            height: 90vh; /* 讓它像一個應用程式介面 */
+            height: 90vh;
         }
 
-        /* 通用卡片風格：玻璃質感 */
         .card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -65,7 +64,6 @@
             gap: 8px;
         }
 
-        /* === 左側：主控區 === */
         .main-panel {
             display: flex;
             flex-direction: column;
@@ -114,7 +112,6 @@
             color: #fff; opacity: 0.2; transform: rotate(-15deg);
         }
 
-        /* 留言板區 */
         .memo-area {
             flex: 1;
             margin-top: 20px;
@@ -137,7 +134,6 @@
         .memo-input:focus { border-color: #818cf8; }
         .save-indicator { font-size: 12px; color: var(--success); margin-top: 8px; height: 20px; opacity: 0; transition: opacity 0.5s; text-align: right;}
 
-        /* === 右側：功能網格 === */
         .grid-panel {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -145,8 +141,6 @@
             gap: 24px;
         }
 
-        /* 卡片內容樣式 */
-        /* 1. 快速資訊 (Copy) */
         .info-row {
             display: flex;
             justify-content: space-between;
@@ -164,7 +158,6 @@
         .info-val:hover { background: rgba(125, 211, 252, 0.1); }
         .info-val:active { transform: scale(0.95); }
 
-        /* 2. 待辦事項 (Todo) */
         .todo-input-group { display: flex; gap: 8px; margin-bottom: 15px; }
         .todo-input-group input {
             flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
@@ -191,13 +184,12 @@
         .delete-btn { color: var(--text-secondary); background: none; border: none; cursor: pointer; font-size: 16px; }
         .delete-btn:hover { color: var(--danger); }
 
-        /* 3. 連結按鈕群 */
         .link-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .link-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: rgba(255,255,255,0.03); text-decoration: none; color: var(--text-primary);
             border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 15px;
-            transition: 0.2s; gap: 8px;
+            transition: 0.2s; gap: 8px; cursor: pointer;
         }
         .link-btn:hover { background: rgba(255,255,255,0.08); border-color: #38bdf8; }
         .link-icon { font-size: 24px; }
@@ -217,14 +209,14 @@
         <div class="card main-panel">
             <div class="welcome-text">
                 <h1>早安，Family</h1>
-                <p id="dateDisplay">載入日期中...</p>
+                <p id="dateDisplay">載入中...</p>
             </div>
 
-            <a href="#" class="cloud-btn" onclick="openCloud(); return false;">
-                <strong>☁️ 開啟家庭雲端</strong>
-                <span>所有檔案、合約、照片都在這裡</span>
+            <button class="cloud-btn" onclick="checkPassAndOpen('cloud')">
+                <strong>🔒 雲端硬碟 (已上鎖)</strong>
+                <span>點擊輸入密碼開啟重要文件</span>
                 <div class="cloud-icon">☁️</div>
-            </a>
+            </button>
 
             <div class="memo-area">
                 <h3>📌 家人留言板 <small>(自動儲存)</small></h3>
@@ -261,8 +253,7 @@
                     <input type="text" id="todoInput" placeholder="輸入事項..." onkeypress="if(event.key==='Enter') addTodo()">
                     <button class="todo-add-btn" onclick="addTodo()">+</button>
                 </div>
-                <ul id="todoList" class="todo-list">
-                    </ul>
+                <ul id="todoList" class="todo-list"></ul>
             </div>
 
             <div class="card">
@@ -290,10 +281,11 @@
             <div class="card">
                 <h3>📁 生活工具箱</h3>
                 <div class="link-grid">
-                    <a href="https://photos.google.com" target="_blank" class="link-btn">
-                        <span class="link-icon">📸</span>
-                        <span class="link-text">家族相簿</span>
-                    </a>
+                    <button class="link-btn" onclick="checkPassAndOpen('photo')">
+                        <span class="link-icon">🔒</span>
+                        <span class="link-text">私密相簿</span>
+                    </button>
+                    
                     <a href="https://calendar.google.com" target="_blank" class="link-btn">
                         <span class="link-icon">📅</span>
                         <span class="link-text">共用日曆</span>
@@ -313,27 +305,56 @@
     </div>
 
     <script>
-        // === 1. 設定區 ===
-        const CLOUD_URL = "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec";
-        function openCloud(){ window.open(CLOUD_URL, "_blank"); }
+        // ==========================================
+        // 🔒 安全設定區 (請在這裡修改)
+        // ==========================================
+        
+        // 1. 設定你的家庭密碼 (預設是 8888)
+        const FAMILY_PASSWORD = "8888"; 
 
-        // === 2. 日期顯示 ===
+        // 2. 設定你的私密連結 (藏在這裡，不要寫在上面 HTML 裡)
+        // 注意：把下面的網址換成你真正的「雲端連結」和「相簿連結」
+        const SECRET_LINKS = {
+            cloud: "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec",
+            photo: "https://photos.google.com/"
+        };
+
+        // ==========================================
+        // 🛑 核心程式碼 (以下不用動)
+        // ==========================================
+
+        // 密碼檢查功能
+        function checkPassAndOpen(type) {
+            let inputPass = prompt("🔒 這是私密區域，請輸入家庭密碼：");
+            
+            if (inputPass === FAMILY_PASSWORD) {
+                // 密碼對了，開啟對應的連結
+                if(SECRET_LINKS[type]) {
+                    window.open(SECRET_LINKS[type], "_blank");
+                } else {
+                    alert("連結設定有誤！");
+                }
+            } else if (inputPass !== null) {
+                // 密碼錯了
+                alert("🚫 密碼錯誤！禁止存取");
+            }
+        }
+
+        // 日期顯示
         const d = new Date();
-        document.getElementById('dateDisplay').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${['日','一','二','三','四','五','六'][d.getDay()]}`;
+        document.getElementById('dateDisplay').textContent = `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
 
-        // === 3. 留言板邏輯 ===
+        // 留言板
         const memoInput = document.getElementById('memoInput');
         const saveStatus = document.getElementById('saveStatus');
-        
-        memoInput.value = localStorage.getItem('family_memo') || ""; // 讀取
-
+        memoInput.value = localStorage.getItem('family_memo') || "";
         memoInput.addEventListener('input', () => {
-            localStorage.setItem('family_memo', memoInput.value); // 存檔
+            localStorage.setItem('family_memo', memoInput.value);
             saveStatus.style.opacity = '1';
             setTimeout(() => { saveStatus.style.opacity = '0'; }, 1500);
         });
 
-        // === 4. 複製功能 ===
+        // 複製功能
         function copyText(el) {
             const originalText = el.innerText;
             navigator.clipboard.writeText(originalText).then(() => {
@@ -346,12 +367,8 @@
             });
         }
 
-        // === 5. 待辦清單邏輯 ===
-        let todos = JSON.parse(localStorage.getItem('family_todos')) || [
-            { text: "記得繳水費", done: false },
-            { text: "買牛奶", done: true }
-        ];
-
+        // 待辦事項
+        let todos = JSON.parse(localStorage.getItem('family_todos')) || [{ text: "記得繳水費", done: false }];
         function renderTodos() {
             const list = document.getElementById('todoList');
             list.innerHTML = "";
@@ -366,29 +383,17 @@
             });
             localStorage.setItem('family_todos', JSON.stringify(todos));
         }
-
         function addTodo() {
             const input = document.getElementById('todoInput');
-            const val = input.value.trim();
-            if (val) {
-                todos.unshift({ text: val, done: false });
+            if (input.value.trim()) {
+                todos.unshift({ text: input.value.trim(), done: false });
                 input.value = "";
                 renderTodos();
             }
         }
-
-        function toggleTodo(idx) {
-            todos[idx].done = !todos[idx].done;
-            renderTodos();
-        }
-
-        function deleteTodo(idx) {
-            todos.splice(idx, 1);
-            renderTodos();
-        }
-
-        // 初始化
+        function toggleTodo(idx) { todos[idx].done = !todos[idx].done; renderTodos(); }
+        function deleteTodo(idx) { todos.splice(idx, 1); renderTodos(); }
         renderTodos();
     </script>
 </body>
-</html> 
+</html>
