@@ -17,48 +17,50 @@
       background:linear-gradient(135deg,var(--bg1),var(--bg2));
       color:var(--text); min-height:100vh;
     }
-    header{ padding:32px 20px 20px; text-align:center; }
-    header h1{ margin:0 0 10px; font-size:28px; letter-spacing:1px; }
-    header p{ margin:0; color:var(--muted); font-size:15px; }
+    header{ padding:40px 20px 20px; text-align:center; }
+    header h1{ margin:0 0 10px; font-size:32px; letter-spacing:1px; }
+    header p{ margin:0; color:var(--muted); font-size:16px; }
     .container{ max-width:1100px; margin:0 auto; padding:20px; }
     
     .main-action{ display:flex; flex-direction:column; align-items:center; gap:14px; margin:24px 0 40px; }
     .cloud-btn{
       background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#020617; border:none; border-radius:16px;
-      padding:18px 28px; font-size:18px; font-weight:700;
+      color:#020617; border:none; border-radius:18px;
+      padding:22px 35px; font-size:20px; font-weight:700;
       cursor:pointer; box-shadow:0 10px 30px rgba(125,211,252,0.3);
       transition: 0.3s;
     }
     .cloud-btn:hover{ transform: scale(1.05); }
-    .cloud-btn small{ display:block; font-size:12px; opacity:.7; }
+    .cloud-btn small{ display:block; font-size:13px; opacity:.8; margin-top:4px; }
 
-    .section{ margin-bottom:36px; }
-    .section h2{ margin:0 0 16px; font-size:20px; display:flex; align-items:center; gap:10px; color:var(--accent); }
-    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; }
+    .section{ margin-bottom:40px; }
+    .section h2{ margin:0 0 20px; font-size:22px; display:flex; align-items:center; gap:10px; color:var(--accent); }
+    .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
     
     .card{
-      background:rgba(255,255,255,.05); border-radius:18px; padding:20px;
-      min-height:150px; display:flex; flex-direction:column; justify-content:space-between;
+      background:rgba(255,255,255,.05); border-radius:20px; padding:24px;
+      min-height:160px; display:flex; flex-direction:column; justify-content:space-between;
       border:1px solid rgba(255,255,255,.1);
+      transition: 0.3s;
     }
-    .card strong{ font-size:18px; color:#fff; }
-    .card p{ font-size:14px; color:#c7d2fe; line-height:1.5; margin: 8px 0; }
+    .card:hover{ background:rgba(255,255,255,.08); border-color:var(--accent); }
+    .card strong{ font-size:19px; color:#fff; display:block; margin-bottom:10px;}
+    .card p{ font-size:15px; color:#c7d2fe; line-height:1.6; margin: 0; }
     
     .card button{
-      align-self:flex-start; margin-top:12px; background:rgba(125,211,252,0.1);
+      align-self:flex-start; margin-top:20px; background:rgba(125,211,252,0.1);
       border:1px solid var(--accent); color:var(--accent);
-      padding:8px 16px; border-radius:10px; cursor:pointer; font-size:14px; font-weight:bold;
+      padding:10px 20px; border-radius:12px; cursor:pointer; font-size:15px; font-weight:bold;
     }
     .card button:hover{ background:var(--accent); color:#000; }
-    footer{ text-align:center; padding:40px; font-size:13px; color:#94a3b8; }
+    footer{ text-align:center; padding:50px; font-size:14px; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.1); }
   </style>
 </head>
 <body>
 
 <header>
   <h1>🏠 家庭智慧入口</h1>
-  <p>專為全家人設計的數位工具箱</p>
+  <p>全家人的雲端、生活、旅遊導航</p>
 </header>
 
 <div class="container">
@@ -71,43 +73,43 @@
   </div>
 
   <div class="section">
-    <h2>📁 家庭生活工具</h2>
+    <h2>📁 生活工具箱</h2>
     <div class="grid">
       <div class="card">
         <strong>📸 家族相簿</strong>
-        <p>查看 Google Photos 裡的全家出遊紀錄與備份照片。</p>
-        <button onclick="openLink('https://photos.google.com')">立即前往</button>
-      </div>
-      <div class="card">
-        <strong>📅 家族行事曆</strong>
-        <p>確認家人的聚餐、出遊與重要紀念日提醒。</p>
-        <button onclick="openLink('https://calendar.google.com')">開啟日曆</button>
+        <p>查看全家人的照片紀錄與生活備份。</p>
+        <button onclick="openExternal('https://photos.google.com')">開啟相簿</button>
       </div>
       <div class="card">
         <strong>📍 Google 地圖</strong>
-        <p>找餐廳、儲存景點或規劃下一趟家庭旅行的路線。</p>
-        <button onclick="openLink('https://www.google.com.tw/maps')">打開地圖</button>
+        <p>找餐廳、儲存景點或規劃旅遊路線。</p>
+        <button onclick="openExternal('https://www.google.com.tw/maps')">打開地圖</button>
+      </div>
+      <div class="card">
+        <strong>📅 家族行事曆</strong>
+        <p>確認家人的聚餐、出遊與重要行程。</p>
+        <button onclick="openExternal('https://calendar.google.com')">開啟日曆</button>
       </div>
     </div>
   </div>
 
   <div class="section">
-    <h2>✈️ 旅遊行程規劃</h2>
+    <h2>✈️ 旅遊與交通</h2>
     <div class="grid">
       <div class="card">
         <strong>🏨 住宿預訂 (Booking)</strong>
-        <p>查詢全世界的飯店、民宿，管理現有訂單。</p>
-        <button onclick="openLink('https://www.booking.com')">前往訂房</button>
+        <p>查詢飯店、民宿，管理現有訂單。</p>
+        <button onclick="openExternal('https://www.booking.com')">前往訂房</button>
       </div>
       <div class="card">
         <strong>🚄 高鐵訂票</strong>
-        <p>快速查詢台灣高鐵時刻表與進行線上購票。</p>
-        <button onclick="openLink('https://www.thsrc.com.tw')">前往高鐵</button>
+        <p>快速查詢時刻表與線上訂票。</p>
+        <button onclick="openExternal('https://www.thsrc.com.tw')">前往高鐵</button>
       </div>
       <div class="card">
         <strong>📧 Gmail 郵件</strong>
-        <p>檢查訂單確認信、電子門票與水電帳單通知。</p>
-        <button onclick="openLink('https://mail.google.com')">開啟 Gmail</button>
+        <p>檢查帳單通知與電子門票。</p>
+        <button onclick="openExternal('https://mail.google.com')">開啟 Gmail</button>
       </div>
     </div>
   </div>
@@ -115,18 +117,18 @@
 </div>
 
 <footer>
-  只要記住這一個網址，全家生活都搞定
+  只要收藏這一頁，生活大小事都搞定
 </footer>
 
 <script>
-// 這就是你剛才拿到的雲端唯一連結
+// 這就是你剛才拿到的雲端唯一連結，我已經幫你填好了
 const CLOUD_URL = "https://script.google.com/macros/s/AKfycbypa9JJFV3222qsNr2TBsQO7dWn54iWGQY3FVce7SBJfJ9JG3S9M_D7ejvNeMk1VoyvXA/exec";
 
 function openCloud(){
   window.open(CLOUD_URL, "_blank");
 }
 
-function openLink(url){
+function openExternal(url){
   window.open(url, "_blank");
 }
 </script>
