@@ -1,135 +1,410 @@
 <!doctype html>
 <html lang="zh-Hant-TW">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>家庭雲端入口</title>
-<meta name="description" content="BeeStation 家庭文件與旅遊攻略的一頁式入口">
+<meta name="description" content="一鍵開啟家庭雲端，其他卡片只做視覺導覽與提醒。" />
 <style>
 :root{
-  --bg:#fffaf7;--panel:rgba(255,255,255,.85);--text:#1f2937;--muted:#6b7280;
-  --line:rgba(31,41,55,.12);--accent:#1f4e79;--accent2:#6aa37c;--accent3:#f0b7c3;
-  --shadow:0 10px 30px rgba(0,0,0,.08);--r:18px;
+  --bg:#070A12;
+  --panel:rgba(255,255,255,.08);
+  --panel2:rgba(255,255,255,.12);
+  --text:#EAF0FF;
+  --muted:rgba(234,240,255,.72);
+  --line:rgba(234,240,255,.12);
+  --shadow:0 18px 60px rgba(0,0,0,.45);
+  --r:22px;
+
+  --a:#6EE7FF;   /* cyan */
+  --b:#A78BFA;   /* purple */
+  --c:#FCA5A5;   /* pink */
+  --d:#86EFAC;   /* green */
+  --gold:#FFD978;
 }
-html[data-theme="dark"]{
-  --bg:#0b1220;--panel:rgba(255,255,255,.08);--text:#e5e7eb;--muted:#a1a1aa;
-  --line:rgba(229,231,235,.14);--shadow:0 10px 30px rgba(0,0,0,.35);
-}
+
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
-  margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",Arial;
-  background:radial-gradient(900px 500px at 15% 10%, rgba(240,183,195,.25), transparent 55%),
-             radial-gradient(900px 500px at 80% 20%, rgba(106,163,124,.22), transparent 55%),
-             var(--bg);color:var(--text);
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",Arial;
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(110,231,255,.18), transparent 60%),
+    radial-gradient(800px 500px at 85% 20%, rgba(167,139,250,.18), transparent 60%),
+    radial-gradient(900px 600px at 40% 95%, rgba(252,165,165,.14), transparent 65%),
+    linear-gradient(180deg, #050711 0%, #070A12 55%, #050711 100%);
+  overflow-x:hidden;
 }
-.container{max-width:1100px;margin:0 auto;padding:22px}
-.topbar{position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);
-  background:color-mix(in srgb, var(--bg) 70%, transparent);
-  border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800}
-.brand__dot{width:12px;height:12px;border-radius:999px;
-  background:linear-gradient(135deg,var(--accent3),var(--accent2))}
+
+a{color:inherit;text-decoration:none}
+.container{max-width:1100px;margin:0 auto;padding:18px 18px 40px}
+.topbar{
+  position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(14px);
+  background:linear-gradient(180deg, rgba(7,10,18,.75), rgba(7,10,18,.35));
+  border-bottom:1px solid var(--line);
+}
+.topbar__inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 18px;gap:12px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;font-weight:900;
+  letter-spacing:.4px;
+}
+.dot{
+  width:12px;height:12px;border-radius:999px;
+  background:conic-gradient(from 180deg,var(--a),var(--b),var(--c),var(--d),var(--a));
+  box-shadow:0 0 24px rgba(110,231,255,.35);
+}
 .nav{display:flex;gap:8px;flex-wrap:wrap}
-.nav a,.nav button{padding:8px 10px;border-radius:12px;border:1px solid var(--line);
-  background:var(--panel);color:var(--text);cursor:pointer}
-.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}
-@media(max-width:900px){.hero{grid-template-columns:1fr}}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
-  padding:18px;box-shadow:var(--shadow)}
-h1{font-size:clamp(26px,3.2vw,40px);margin:.2em 0}
-p{color:var(--muted);line-height:1.7}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-.btn{padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel)}
-.btn.primary{background:linear-gradient(135deg, rgba(31,78,121,.2), rgba(106,163,124,.16))}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.grid3{grid-template-columns:repeat(3,1fr)}
-@media(max-width:900px){.grid,.grid3{grid-template-columns:1fr}}
-.card{padding:14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
-.card:hover{background:rgba(31,78,121,.1)}
-footer{margin-top:24px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:13px}
-section{scroll-margin-top:90px}
+.pill{
+  padding:9px 12px;border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  font-size:14px;
+}
+.pill:hover{background:rgba(255,255,255,.1)}
+.pill:active{transform:translateY(1px)}
+
+.hero{
+  margin-top:16px;
+  display:grid;grid-template-columns:1.2fr .8fr;gap:14px;
+}
+@media(max-width:940px){.hero{grid-template-columns:1fr}}
+.panel{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:18px;
+  position:relative;
+  overflow:hidden;
+}
+.panel::before{
+  content:"";
+  position:absolute;inset:-80px;
+  background:
+    radial-gradient(300px 240px at 20% 20%, rgba(110,231,255,.22), transparent 60%),
+    radial-gradient(260px 220px at 80% 30%, rgba(167,139,250,.20), transparent 60%),
+    radial-gradient(260px 240px at 35% 85%, rgba(252,165,165,.16), transparent 60%);
+  filter:blur(10px);
+  opacity:.9;
+  pointer-events:none;
+}
+.panel > *{position:relative}
+
+h1{
+  margin:.1em 0 .2em;
+  font-size:clamp(28px,3.4vw,44px);
+  line-height:1.12;
+}
+.lead{color:var(--muted);line-height:1.75;font-size:15px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 2px}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:rgba(234,240,255,.86);
+  font-size:13px;
+}
+.spark{
+  width:10px;height:10px;border-radius:999px;
+  background:linear-gradient(135deg,var(--a),var(--b));
+  box-shadow:0 0 18px rgba(167,139,250,.25);
+}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:12px 14px;border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.07);
+  color:var(--text);
+  font-weight:700;
+}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{
+  background:linear-gradient(135deg, rgba(110,231,255,.22), rgba(167,139,250,.18), rgba(252,165,165,.14));
+  border-color:rgba(255,255,255,.22);
+}
+.btn small{font-weight:600;color:rgba(234,240,255,.75)}
+.kbd{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12px;
+  padding:3px 7px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.25);
+  color:rgba(234,240,255,.88);
+}
+
+.visual{
+  display:grid;gap:12px;
+}
+.preview{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  border-radius:18px;
+  padding:14px;
+}
+.preview__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.lights{display:flex;gap:6px}
+.light{width:10px;height:10px;border-radius:99px;opacity:.9}
+.light.r{background:#ff6b6b}
+.light.y{background:#ffd93d}
+.light.g{background:#6bff95}
+
+.mini{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px
+}
+@media(max-width:520px){.mini{grid-template-columns:1fr}}
+.tile{
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border-radius:16px;
+  padding:12px;
+  overflow:hidden;
+  position:relative;
+}
+.tile::after{
+  content:"";
+  position:absolute;inset:-40px;
+  background:radial-gradient(220px 140px at 20% 20%, rgba(110,231,255,.18), transparent 60%),
+             radial-gradient(220px 140px at 80% 30%, rgba(167,139,250,.16), transparent 60%);
+  filter:blur(10px);
+  opacity:.8;
+  pointer-events:none;
+}
+.tile > *{position:relative}
+.tile h3{margin:0 0 6px;font-size:15px}
+.tile p{margin:0;color:rgba(234,240,255,.72);font-size:13px;line-height:1.55}
+.icon{
+  width:42px;height:42px;border-radius:14px;
+  display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.18);
+  margin-bottom:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.section{
+  margin-top:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  border-radius:var(--r);
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.section h2{margin:0 0 10px;font-size:18px}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px
+}
+@media(max-width:940px){.grid{grid-template-columns:1fr}}
+.card{
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  padding:14px;
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:"";
+  position:absolute;inset:-60px;
+  background:radial-gradient(260px 180px at 30% 25%, rgba(252,165,165,.16), transparent 60%),
+             radial-gradient(240px 170px at 80% 35%, rgba(134,239,172,.14), transparent 60%);
+  filter:blur(10px);
+  opacity:.8;
+}
+.card > *{position:relative}
+.card__row{display:flex;gap:10px;align-items:flex-start}
+.card__title{margin:0;font-size:15px}
+.card__desc{margin:4px 0 0;color:rgba(234,240,255,.72);font-size:13px;line-height:1.55}
+.tag{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:10px;
+  padding:7px 10px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(0,0,0,.18);
+  font-size:12px;color:rgba(234,240,255,.78);
+}
+.hr{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
+
+footer{
+  margin-top:18px;
+  color:rgba(234,240,255,.62);
+  font-size:13px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:0 2px;
+}
+.glow{
+  position:fixed;inset:auto -20% -30% -20%;
+  height:280px;
+  background:conic-gradient(from 180deg, rgba(110,231,255,.18), rgba(167,139,250,.16), rgba(252,165,165,.14), rgba(134,239,172,.12), rgba(110,231,255,.18));
+  filter:blur(40px);
+  opacity:.7;
+  pointer-events:none;
+  animation:float 10s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-18px)}
+}
 </style>
 </head>
+
 <body>
+<div class="glow" aria-hidden="true"></div>
+
 <header class="topbar">
-  <div class="brand"><span class="brand__dot"></span>家庭雲端入口</div>
-  <div class="nav">
-    <a href="#home">首頁</a>
-    <a href="#family">家庭文件</a>
-    <a href="#travel">旅遊攻略</a>
-    <a href="#help">使用說明</a>
-    <button id="theme">深色模式</button>
+  <div class="topbar__inner">
+    <div class="brand">
+      <span class="dot"></span>
+      家庭雲端入口
+    </div>
+    <nav class="nav">
+      <a class="pill" href="#home">首頁</a>
+      <a class="pill" href="#guide">使用說明</a>
+      <a class="pill" href="#tips">小提醒</a>
+    </nav>
   </div>
 </header>
 
 <main class="container">
-<section id="home" class="hero">
-  <div class="panel">
-    <h1>BeeStation 家庭雲端入口</h1>
-    <p>一個頁面就夠：點卡片直接打開 BeeStation 分享的資料夾或檔案。</p>
-    <div class="actions">
-      <a class="btn primary" href="#family">家庭文件</a>
-      <a class="btn" href="#travel">旅遊攻略</a>
-      <a class="btn" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank" rel="noopener">常用連結</a>
+  <section id="home" class="hero">
+    <div class="panel">
+      <h1>一鍵開啟<br>家庭雲端</h1>
+      <p class="lead">
+        這頁的設計邏輯很單純：<b>只有一個真正的雲端入口</b>。<br>
+        其他卡片只是「視覺導覽 / 提醒」，不會把人帶到一堆不同連結，避免家人迷路。
+      </p>
+
+      <div class="badges">
+        <span class="badge"><span class="spark"></span>一個連結就夠</span>
+        <span class="badge"><span class="spark"></span>手機也好按</span>
+        <span class="badge"><span class="spark"></span>顏色活潑、生動</span>
+      </div>
+
+      <div class="actions">
+        <!-- ✅ 唯一的雲端連結：改這裡就好 -->
+        <a class="btn primary" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank" rel="noopener">
+          ☁️ 打開家庭雲端
+          <small>（唯一入口）</small>
+        </a>
+
+        <a class="btn" href="#guide">
+          📌 怎麼用
+          <span class="kbd">1 分鐘</span>
+        </a>
+      </div>
+
+      <div class="hr"></div>
+      <div class="lead">
+        如果你以後換連結，只要改「☁️ 打開家庭雲端」這個按鈕的網址，其他完全不用動。
+      </div>
     </div>
-  </div>
-  <div class="panel">
-    <h3>快速入口</h3>
+
+    <div class="panel visual">
+      <div class="preview">
+        <div class="preview__top">
+          <div class="lights">
+            <span class="light r"></span><span class="light y"></span><span class="light g"></span>
+          </div>
+          <div style="color:rgba(234,240,255,.75);font-size:13px">家庭雲端導覽</div>
+        </div>
+
+        <div class="mini">
+          <div class="tile">
+            <div class="icon">📁</div>
+            <h3>重要文件</h3>
+            <p>保險、合約、身分證明等，集中歸檔。</p>
+          </div>
+          <div class="tile">
+            <div class="icon">🧾</div>
+            <h3>帳單收據</h3>
+            <p>繳費、保固、收據，之後好找不遺失。</p>
+          </div>
+          <div class="tile">
+            <div class="icon">✈️</div>
+            <h3>旅遊資料</h3>
+            <p>機票、住宿、行程表，出門前一鍵打開。</p>
+          </div>
+          <div class="tile">
+            <div class="icon">⭐</div>
+            <h3>常用連結</h3>
+            <p>把常用的東西放一起，家人不用記很多網址。</p>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;color:rgba(234,240,255,.62);font-size:12px;line-height:1.6">
+          這些卡片只是「畫面與分類提示」，真正要進雲端請按左邊的 ☁️ 大按鈕。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tips" class="section">
+    <h2>這頁會幫家人做到什麼？</h2>
     <div class="grid">
-      <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">📁 家庭重要文件</a>
-      <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🧾 收據 / 帳單</a>
-      <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">✈️ 旅遊資料夾</a>
-      <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">⭐ 常用連結</a>
+      <div class="card">
+        <div class="card__row">
+          <div class="icon">🧭</div>
+          <div>
+            <h3 class="card__title">不迷路</h3>
+            <p class="card__desc">只有一個入口，不會點到不同資料夾、不同網址搞混。</p>
+            <span class="tag">✅ 最適合長輩</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__row">
+          <div class="icon">🎨</div>
+          <div>
+            <h3 class="card__title">有畫面、好懂</h3>
+            <p class="card__desc">分類用圖像呈現：重要文件、帳單、旅遊、常用連結。</p>
+            <span class="tag">✨ 視覺引導</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__row">
+          <div class="icon">🔁</div>
+          <div>
+            <h3 class="card__title">以後好維護</h3>
+            <p class="card__desc">雲端連結換了？只改一行（那顆 ☁️ 按鈕）。</p>
+            <span class="tag">🛠️ 省事</span>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="family" class="panel" style="margin-top:16px">
-  <h2>家庭文件</h2>
-  <div class="grid3">
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">📄 保險 / 合約</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🔧 家電保固</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🪪 身分證明</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">💼 財務 / 稅務</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🏠 房屋 / 租約</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🧾 帳單 / 收據</a>
-  </div>
-</section>
+  <section id="guide" class="section">
+    <h2>給家人的 1 分鐘說明</h2>
+    <div class="card" style="margin-top:10px">
+      <div style="display:grid;gap:10px;color:rgba(234,240,255,.82);line-height:1.75">
+        <div><b>1)</b> 打開這個網頁（看到「☁️ 打開家庭雲端」）。</div>
+        <div><b>2)</b> 只要按那顆 ☁️ 大按鈕，就會進入雲端資料。</div>
+        <div><b>3)</b> 其他卡片只是提示分類，不用每個都點。</div>
+      </div>
+    </div>
+  </section>
 
-<section id="travel" class="panel" style="margin-top:16px">
-  <h2>旅遊攻略</h2>
-  <div class="grid3">
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🇯🇵 日本福岡</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🇰🇷 韓國首爾</a>
-    <a class="card" href="http://kq0yur8b7t9kbear4gashzac7keuyfx.quickconnect.to/sharing/WH2EP5Gnd" target="_blank">🚄 台中小旅行</a>
-  </div>
-</section>
-
-<section id="help" class="panel" style="margin-top:16px">
-  <h2>給家人的 1 分鐘說明</h2>
-  <ol>
-    <li>打開這個檔案（index.html）。</li>
-    <li>點上方或卡片，會開啟 BeeStation 分享頁。</li>
-    <li>看到內容就代表你有權限。</li>
-  </ol>
-</section>
-
-<footer>
-  © <span id="y"></span> 家庭雲端入口
-</footer>
+  <footer>
+    <div>© <span id="y"></span> 家庭雲端入口</div>
+    <div style="opacity:.9">提示：雲端只有一個入口按鈕（☁️）</div>
+  </footer>
 </main>
 
 <script>
-const root=document.documentElement;
-const btn=document.getElementById('theme');
-const saved=localStorage.getItem('theme');
-if(saved==='dark')root.setAttribute('data-theme','dark');
-btn.onclick=()=>{
-  const d=root.getAttribute('data-theme')==='dark';
-  if(d){root.removeAttribute('data-theme');localStorage.setItem('theme','light');btn.textContent='深色模式';}
-  else{root.setAttribute('data-theme','dark');localStorage.setItem('theme','dark');btn.textContent='淺色模式';}
-};
-document.getElementById('y').textContent=new Date().getFullYear();
+document.getElementById('y').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
